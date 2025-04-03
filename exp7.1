@@ -1,38 +1,38 @@
+package first;
+
 import java.sql.*;
 
-public class MySQLConnection {
-    public static void main(String[] args) {
-        String url = "jdbc:mysql://localhost:3306/your_database_name";
-        String user = "your_username";
-        String password = "your_password";
+public class EmoployeeDataFetch {
 
+    public static void main(String[] args) {
+      
+        String url = "jdbc:mysql://localhost:3306/db";
+        String user = "root";
+        String password = "Ranit@321";
+
+        
         String query = "SELECT EmpID, Name, Salary FROM Employee";
 
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-  
-            Connection conn = DriverManager.getConnection(url, user, password);
+           
+            Connection connection = DriverManager.getConnection(url, user, password);
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(query);
 
-            Statement stmt = conn.createStatement();
-
-            ResultSet rs = stmt.executeQuery(query);
-
-            System.out.println("EmpID | Name | Salary");
-            System.out.println("----------------------");
-            while (rs.next()) {
-                int empId = rs.getInt("EmpID");
-                String name = rs.getString("Name");
-                double salary = rs.getDouble("Salary");
-                System.out.println(empId + " | " + name + " | " + salary);
+          
+            while (resultSet.next()) {
+                int empID = resultSet.getInt("EmpID");
+                String name = resultSet.getString("Name");
+                double salary = resultSet.getDouble("Salary");
+                System.out.println("EmpID: " + empID + ", Name: " + name + ", Salary: " + salary);
             }
-                 rs.close();
-            stmt.close();
-            conn.close();
-        } catch (ClassNotFoundException e) {
-            System.out.println("MySQL JDBC Driver not found.");
-            e.printStackTrace();
+
+           
+            resultSet.close();
+            statement.close();
+            connection.close();
+
         } catch (SQLException e) {
-            System.out.println("Database connection error.");
             e.printStackTrace();
         }
     }
